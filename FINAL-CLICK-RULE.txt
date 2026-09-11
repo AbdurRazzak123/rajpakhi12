@@ -1,0 +1,17 @@
+FINAL CLICK RULE
+
+ডান পাশের Latest News:
+  → news/ID.html
+  → সেই নিউজের Full News
+
+প্রতিটি পেজের নিচের ৬টি Card:
+  → news/ID.html
+  → সেই Card-এর নিজের ID-এর Full News
+
+কোনো Card বা Latest News একই পেজের ভেতরে preview render করবে না।
+প্রতিটি ক্লিক সরাসরি সংশ্লিষ্ট news/ID.html-এ যাবে।
+
+GitHub upload:
+- news/ folder অবশ্যই upload করতে হবে
+- news/ID.html ফাইলগুলো অবশ্যই থাকতে হবে
+- assets/ folder-ও upload করতে হবে

@@ -1419,11 +1419,11 @@ function imageFallback(img){
 }
 function isCategory(n){const c=norm(n.category);return CATEGORY_VALUES.some(v=>norm(v)===c);}
 function latest(list){return [...list].reverse();}
-function articleUrl(id){return new URL('news/'+encodeURIComponent(normId(id))+'.html', document.baseURI).href;}
+function articleUrl(id){return 'news/'+encodeURIComponent(normId(id))+'.html';}
 function feature(n){
   if(!n)return `<div class="vertical-news-block"><div class="news-text-bottom"><h3>এই ক্যাটাগরিতে এখন কোনো সংবাদ নেই।</h3></div></div>`;
   const img=n.image?`<div class="news-image-top"><img loading="lazy" decoding="async" src="${esc(imageUrl(n.image))}" data-image-source="${esc(n.image)}" alt="${esc(n.title)}" onerror="imageFallback(this)"></div>`:'';
-  return `<div class="vertical-news-block" id="news-${esc(normId(n.id))}">${img}<div class="news-text-bottom"><span class="category-tag">${esc(CATEGORY_LABEL)}</span><div class="breaking-news-date">${esc(n.date)}</div><h3>${esc(n.title)}</h3>${n.summary?`<p class="home-summary">${esc(n.summary)}</p>`:''}</div></div>`;
+  return `<div class="vertical-news-block" id="news-${esc(normId(n.id))}"><a href="${articleUrl(n.id)}" class="feature-news-link">${img}<div class="news-text-bottom"><span class="category-tag">${esc(CATEGORY_LABEL)}</span><div class="breaking-news-date">${esc(n.date)}</div><h3>${esc(n.title)}</h3>${n.summary?`<p class="home-summary">${esc(n.summary)}</p>`}</div></a></div>`;
 }
 function sideItem(n){
   const img=n.image?`<img loading="lazy" decoding="async" src="${esc(imageUrl(n.image))}" data-image-source="${esc(n.image)}" alt="${esc(n.title)}" onerror="imageFallback(this)">`:'';
@@ -1444,14 +1444,9 @@ load().then(list=>{
   const c=document.getElementById('news-container'); if(c)c.innerHTML=feature(newest);
   const ticker=document.querySelector('.breaking .ticker-track'); if(ticker)ticker.textContent=newest?newest.title:'এই ক্যাটাগরিতে কোনো সংবাদ নেই';
   const lc=document.getElementById('latest-news-container'); if(lc)lc.innerHTML=categoryNews.slice(0,5).map(sideItem).join('')||'<div style="text-align:center;padding:20px;color:#888;">কোনো সংবাদ নেই।</div>';
-  const six=[];
-  for(const key of Object.keys(LABELS)){
-    if(key===CATEGORY_KEY)continue;
-    const n=ordered.find(x=>CATEGORY_MAP[key].some(v=>norm(v)===norm(x.category)));
-    if(n)six.push([n,LABELS[key]]);
-  }
+  const six = categoryNews.slice(0, 6).map(n => [n, CATEGORY_LABEL]);
   const grid=document.getElementById('category-six-grid');
-  if(grid)grid.innerHTML=six.slice(0,6).map(([n,l])=>sixCard(n,l)).join('')||'<div style="text-align:center;padding:30px;color:#888;grid-column:1/-1;">কোনো সংবাদ নেই।</div>';
+  if(grid)grid.innerHTML=six.map(([n,l])=>sixCard(n,l)).join('')||'<div style="text-align:center;padding:30px;color:#888;grid-column:1/-1;">কোনো সংবাদ নেই।</div>';
 }).catch(e=>{
   console.error(e);
   const c=document.getElementById('news-container'); if(c)c.innerHTML='<div style="text-align:center;padding:40px;color:#888;">খবর লোড করা যাচ্ছে না।</div>';
